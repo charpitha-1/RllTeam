@@ -1,0 +1,110 @@
+﻿
+<head>
+    <meta charset="UTF-8" />
+    <title>Spice Villa - FoodExpress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .badge-popular {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .card-title {
+            min-height: 3rem;
+        }
+
+        .floating-cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .quantity-controls button {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FoodExpress</a>
+            <li class="nav-item"><a class="btn btn-outline-light" asp-area="" asp-controller="Cart" asp-action="Index">Go to Cart</a></li>
+        </div>
+    </nav>
+
+    <!-- Restaurant Info -->
+    <header class="bg-warning text-dark p-4 text-center">
+        <h1 class="mb-0">Welcome to Spice Villa</h1>
+        <p class="mb-0">Authentic Indian Cuisine | ⭐ 4.6 | 2.3 km away</p>
+    </header>
+
+    <!-- Menu Section -->
+    <div class="container my-5">
+        <h3 class="mb-4">🍛 Our Specials</h3>
+        <div class="row" id="menuItems">
+            <!-- Food cards will be injected here Dynamically -->
+        </div>
+    </div>
+
+    <!-- More Info Modal -->
+    <<!-- More Info Modal -->
+    <div class="modal fade" id="moreInfoModal" tabindex="-1" aria-labelledby="moreInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="moreInfoModalLabel">Dish Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="modalDishName" class="mb-3"></h6>
+
+                    <label for="userComment" class="form-label">Your Comment:</label>
+                    <textarea id="userComment" class="form-control mb-3" rows="3" placeholder="Write your review here..."></textarea>
+                    <button id="submitComment" class="btn btn-primary mb-3">Submit</button>
+
+                    <h6>Previous Reviews:</h6>
+                    <ul id="reviewsList" class="list-group">
+                        <!-- Reviews inserted here -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Floating Cart Button -->
+   
+    <a asp-area="" asp-controller="Cart" asp-action="Index" id="cartBtn" class="btn btn-success floating-cart d-none">
+        🛒 View Cart (<span id="cartCount">0</span>)
+    </a>
+
+    <!-- Bootstrap & JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Javascript implementation -->
+    <script src="~/js/cartManager.js"></script>
+    <script>
+        const cart = getCart();
+        for (const id in foodLookup) {
+          const qty = cart[id] || 0;
+          renderFoodCard(id, qty, "menuItems");
+        }
+                function setDeliveryDistance(km) {
+          localStorage.setItem("deliveryKm", km);
+        }
+
+    </script>
+    <script>
+        updateFloatingCart(); // shows cart if anything was already added
+    </script>
+
+
+</body>

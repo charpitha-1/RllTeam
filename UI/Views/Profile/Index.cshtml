@@ -1,0 +1,35 @@
+﻿@model FoodieCoreMVC.Models.UserProfileViewModel
+
+<div class="container mt-4 profile-box">
+    <div class="profile-header text-center">
+        <h2>@Model.Name</h2>
+        <p>Foodie | Chennai, Tamil Nadu</p>
+    </div>
+
+    <div class="p-4">
+        <dl class="row profile-info">
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">+91 98765 43210</dd>
+
+            <dt class="col-sm-3">Address</dt>
+            <dd class="col-sm-9">12, Marina Street, Chennai</dd>
+
+            <dt class="col-sm-3">Member Since</dt>
+            <dd class="col-sm-9">August 2023</dd>
+        </dl>
+
+        <hr />
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start flex-wrap mt-3">
+            <a href="order-history.html" class="btn btn-outline-primary me-md-2 mb-2">Order History</a>
+            <a href="favorites.html" class="btn btn-outline-warning me-md-2 mb-2">Liked Items</a>
+            <a href="scheduled-orders.html" class="btn btn-outline-success me-md-2 mb-2">Scheduled Orders</a>
+            <a href="rating-review.html" class="btn btn-outline-dark me-md-2 mb-2">Rate & Review</a>
+            <a href="cancel-order.html" class="btn btn-outline-danger me-md-2 mb-2">Cancel Order</a>
+            <a href="modify-order.html" class="btn btn-outline-secondary me-md-2 mb-2">Modify Order</a>
+            <a href="edit-profile.html" class="btn btn-outline-info me-md-2 mb-2">Edit Profile</a>
+        </div>
+    </div>
+</div>
