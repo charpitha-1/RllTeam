@@ -1,0 +1,47 @@
+﻿@using FoodMVC1.DTO
+@model Search
+
+<h2>Search Food Items</h2>
+@using (var frm = Html.BeginForm("ViewFoodItemSearch","Search", FormMethod.Post)){
+<div>
+    <label>City:</label>
+    <select id="citySelect">
+        <option value="">Select City</option>
+        @foreach (var city in Model.Cities)
+        {
+            <option value="@city">@city</option>
+        }
+    </select>
+
+    <label>Area:</label>
+    <select id="areaSelect">
+        <option value="">Select Area</option>
+        @foreach (var area in Model.Areas)
+        {
+            <option value="@area">@area</option>
+        }
+    </select>
+
+    <label>Postal Code:</label>
+    <select id="postalCodeSelect">
+        <option value="">Select Postal Code</option>
+        @foreach (var code in Model.PostalCodes)
+        {
+            <option value="@code">@code</option>
+        }
+    </select>
+
+    <label>Restaurant:</label>
+    <select id="restaurantSelect">
+        <option value="">Select Restaurant</option>
+        @foreach (var restaurant in Model.RestaurantNames)
+        {
+            <option value="@restaurant">@restaurant</option>
+        }
+    </select>
+
+    <button type="submit" id="searchBtn">Search</button>
+</div>
+
+}
+
