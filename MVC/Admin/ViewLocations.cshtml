@@ -1,0 +1,26 @@
+﻿@using FoodieMVC.DTO;
+@model List<LocationDTO>
+
+<h2>Locations List</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Location ID</th>
+            <th>City</th>
+            <th>Area</th>
+            <th>Postal Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loc in Model)
+        {
+            <tr>
+                <td>@loc.locationId</td>
+                <td>@loc.city</td>
+                <td>@loc.area</td>
+                <td>@loc.postalCode</td>
+            </tr>
+        }
+    </tbody>
+</table>

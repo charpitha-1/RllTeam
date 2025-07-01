@@ -1,0 +1,35 @@
+﻿@using FoodieMVC.DTO;
+
+@model List<RestuarantDTO>
+
+<h2>Restaurants List</h2>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Restaurant ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Likes</th>
+            <th>Rating</th>
+            <th>Opening Time</th>
+            <th>Close Time</th>
+            <th>Location ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rest in Model)
+        {
+            <tr>
+                <td>@rest.restaurantId</td>
+                <td>@rest.restaurantName</td>
+                <td>@rest.restaurantAddress</td>
+                <td>@(rest.likes ?? 0)</td>
+                <td>@rest.rating.ToString("0.0")</td>
+                <td>@rest.openingTime.ToString("hh:mm tt")</td>
+                <td>@rest.closeTime.ToString("hh:mm tt")</td>
+                <td>@rest.restLocId</td>
+            </tr>
+        }
+    </tbody>
+</table>

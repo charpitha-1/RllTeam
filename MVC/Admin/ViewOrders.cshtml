@@ -1,0 +1,53 @@
+﻿@using FoodieMVC.DTO
+@model List<OrderDetailsDTO>
+
+<h2>Orders List</h2>
+
+@foreach (var order in Model)
+{
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <strong>Order ID:</strong> @order.orderId &nbsp; | &nbsp;
+            <strong>Status:</strong> @order.orderStatus
+        </div>
+        <div class="card-body">
+            <p><strong>Order Date:</strong> @order.orderDate.ToString("dd-MMM-yyyy hh:mm tt")</p>
+            <p><strong>User ID:</strong> @order.userId</p>
+            <p><strong>Restaurant ID:</strong> @order.restId</p>
+            <p><strong>Address ID:</strong> @order.addressId</p>
+            <p><strong>Delivery:</strong> @order.deliveredBy</p>
+            <p><strong>Scheduled Delivery:</strong> @(order.scheduleDeliveryAt?.ToString("dd-MMM-yyyy hh:mm tt") ?? "ASAP")</p>
+            <p>
+                <strong>Discount:</strong> ₹@order.discount &nbsp; | &nbsp;
+                <strong>GST:</strong> ₹@order.gst &nbsp; | &nbsp;
+                <strong>Total:</strong> ₹@order.orderTotal &nbsp; | &nbsp;
+                <strong>Final:</strong> ₹@order.finalAmount
+            </p>
+
+            <hr />
+            <h5>Line Items</h5>
+            <table class="table table-sm table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Food Item ID</th>
+                        <th>Quantity</th>
+                        <th>Unit Price (₹)</th>
+                        <th>Subtotal (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in order.orderLineItems)
+                    {
+                        <tr>
+                            <td>@item.foodItemId</td>
+                            <td>@item.qty</td>
+                            <td>@item.unitPrice.ToString("0.00")</td>
+                            <td>@(item.qty* item.unitPrice).ToString("0.00")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
