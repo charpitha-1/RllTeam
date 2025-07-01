@@ -1,0 +1,39 @@
+﻿@using FoodieMVC.DTO
+@model List<ReviewDTO>
+
+<h2>Customer Reviews</h2>
+
+@if (!Model.Any())
+{
+    <p>No reviews yet.</p>
+}
+else
+{
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Review ID</th>
+                <th>User ID</th>
+                <th>Order ID</th>
+                <th>Food Item ID</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.reviewId</td>
+                    <td>@r.userId</td>
+                    <td>@r.orderId</td>
+                    <td>@r.foodItemId</td>
+                    <td>@r.rating</td>
+                    <td>@r.comments</td>
+                    <td>@r.createdAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
