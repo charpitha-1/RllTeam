@@ -1,0 +1,7 @@
+﻿<h1>Admin Dashbhoard</h1>
+<p>Welcome, @User.Identity.Name!</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>You are an admin.</p>
+}
