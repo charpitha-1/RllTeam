@@ -1,0 +1,57 @@
+﻿@model FoodappMVC.DTO.LoginDTO
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2 class="text-center">User Login</h2>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <form asp-action="AccountLogin" method="post" class="border p-4 rounded shadow-sm bg-light">
+
+            <div class="form-group mb-3">
+                <label asp-for="email" class="form-label">Email</label>
+                <input asp-for="email" class="form-control" />
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="password" class="form-label">Password</label>
+                <input asp-for="password" type="password" class="form-control" />
+                <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Captcha</label>
+                <div class="d-flex align-items-center">
+                    <input type="text" readonly class="form-control me-2" value="@Model.CaptchaI" style="font-weight: bold; letter-spacing: 3px;" />
+                    <button type="submit" class="btn btn-outline-secondary" formaction="@Url.Action("AccountLogin", "Account")" formmethod="get" title="Refresh Captcha">↻</button>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CaptchaText" class="form-label">Enter Captcha</label>
+                <input asp-for="CaptchaText" class="form-control" />
+                <span asp-validation-for="CaptchaText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-3">
+                <input asp-for="NotRobot" class="form-check-input" />
+                <label asp-for="NotRobot" class="form-check-label">I am not a robot</label>
+                <span asp-validation-for="NotRobot" class="text-danger d-block"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+
+            <div class="text-center mt-3">
+                <span>If you don't have an account, </span>
+                <a asp-action="Registration" asp-controller="Account">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
