@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    /* Limit and center the dropdown */
+    #searchContainer {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    #searchResults {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1055;
+        background: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+        max-height: 360px;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+        #searchResults li {
+            padding: 0.85rem 1.25rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.15s ease-in-out;
+        }
+
+            #searchResults li:hover {
+                background-color: #f8f9fa;
+            }
+
+    #searchInput {
+        border-radius: 0.5rem;
+        padding: 1rem;
+        font-size: 1.1rem;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+</style>
+
+
+<header class="jumbotron text-center  py-5" style="background-color:coral">
+    <div id="searchContainer" class="my-5">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search for dishes or restaurants..." />
+        <ul id="searchResults" class="list-group"></ul>
+    </div>
+
+    <h1 class="display-4">Craving Something Delicious?</h1>
+    <p>Order from your favorite restaurants, fast and easy.</p>
+</header>
+
+<tr>
+    <th><h4>Our Recommendation</h4></th>
+    <td>
+        <button>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Restaurent" asp-action="Index">Restaurent</a>
+            </li>
+        </button>
+        <button>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Restaurent" asp-action="Index">Restaurent</a>
+            </li>
+        </button>
+        <button>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Restaurent" asp-action="Index">Restaurent</a>
+            </li>
+        </button>
+
+    </td>
+    <th><h4>Our Recommendation</h4></th>
+</tr>
+<script src="~/js/cartManager.js"></script>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      searchResults.innerHTML = "";
+
+      if (!query) return;
+
+      const seen = new Set();
+
+      // Match food
+      Object.entries(foodLookup).forEach(([id, item]) => {
+        if (item.name.toLowerCase().includes(query) && !seen.has(item.name)) {
+          seen.add(item.name);
+          const li = document.createElement("li");
+          li.className = "list-group-item list-group-item-action";
+          li.innerHTML = `🍛 <strong>${item.name}</strong> <span class="text-muted">from ${item.restaurant}</span>`;
+          li.onclick = () => location.href = "https://localhost:7225/Restaurent";
+          searchResults.appendChild(li);
+        }
+      });
+
+      // Match restaurants
+      Object.keys(restaurantPages).forEach(rest => {
+        if (rest.toLowerCase().includes(query) && !seen.has(rest)) {
+          seen.add(rest);
+          const li = document.createElement("li");
+          li.className = "list-group-item list-group-item-action";
+          li.innerHTML = `🏪 <strong>${rest}</strong>`;
+          li.onclick = () => location.href = restaurantPages[rest];
+          searchResults.appendChild(li);
+        }
+      });
+    });
+
+    // Hide on click outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#searchInput") && !e.target.closest("#searchResults")) {
+        searchResults.innerHTML = "";
+      }
+    });
+</script>
+
+
+
