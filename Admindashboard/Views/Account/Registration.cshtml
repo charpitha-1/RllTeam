@@ -1,0 +1,78 @@
+﻿@model FoodappMVC.DTO.RegisterDTO
+
+@* @{
+    ViewData["Title"] = "Register";
+} *@
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create an Account</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Registration" method="post" class="border p-4 rounded bg-light shadow-sm">
+
+                <div class="form-group mb-3">
+                    <label asp-for="firstName" class="form-label">First Name</label>
+                    <input asp-for="firstName" class="form-control" />
+                    <span asp-validation-for="firstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="lastName" class="form-label">Last Name</label>
+                    <input asp-for="lastName" class="form-control" />
+                    <span asp-validation-for="lastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="email" class="form-label">Email</label>
+                    <input asp-for="email" class="form-control" />
+                    <span asp-validation-for="email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="phoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="phoneNumber" class="form-control" />
+                    <span asp-validation-for="phoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="password" class="form-label">Password</label>
+                    <input asp-for="password" type="password" class="form-control" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input asp-for="confirmPassword" type="password" class="form-control" />
+                    <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Captcha</label>
+                    <div class="d-flex align-items-center">
+                        <input type="text" readonly class="form-control me-2" value="@Model.CaptchaI" style="font-weight: bold; letter-spacing: 3px;" />
+                        <a asp-action="Registration" asp-controller="Account" class="btn btn-outline-secondary" title="Refresh Captcha">↻</a>
+
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CaptchaText" class="form-label">Enter Captcha</label>
+                    <input asp-for="CaptchaText" class="form-control" />
+                    <span asp-validation-for="CaptchaText" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+
+                <div class="text-center mt-3">
+                    <span>Already have an account? </span>
+                    <a asp-action="AccountLogin" asp-controller="Account">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

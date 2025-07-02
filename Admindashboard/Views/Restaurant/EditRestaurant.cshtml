@@ -1,0 +1,149 @@
+﻿@model FoodieMVC.DTO.RestuarantDTO
+@{
+    ViewData["Title"] = "Edit Restaurant";
+}
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white py-3 px-4 rounded-top-4">
+            <h3 class="mb-0"><i class="bi bi-pencil-square me-2"></i> Edit Restaurant Details</h3>
+        </div>
+        <div class="card-body px-4 py-4 bg-light-subtle">
+            <form asp-action="EditRestaurant" method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="restaurantId" />
+
+                <div class="mb-3">
+                    <label asp-for="restaurantName" class="form-label"></label>
+                    <input asp-for="restaurantName" class="form-control" required />
+                    <span asp-validation-for="restaurantName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="restaurantAddress" class="form-label"></label>
+                    <input asp-for="restaurantAddress" class="form-control" required />
+                    <span asp-validation-for="restaurantAddress" class="text-danger small"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="likes" class="form-label"></label>
+                        <input asp-for="likes" class="form-control" type="number" min="0" required />
+                        <span asp-validation-for="likes" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="rating" class="form-label"></label>
+                        <input asp-for="rating" class="form-control" type="number" step="0.1" min="0" max="5" required />
+                        <span asp-validation-for="rating" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="openingTime" class="form-label"></label>
+                        <input asp-for="openingTime" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="openingTime" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="closeTime" class="form-label"></label>
+                        <input asp-for="closeTime" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="closeTime" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="restLocId" class="form-label"></label>
+                    <input asp-for="restLocId" class="form-control" required />
+                    <span asp-validation-for="restLocId" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button type="submit" class="btn btn-success px-4">💾 Update</button>
+                    <a asp-action="ViewRestaurants" class="btn btn-outline-secondary px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-center mt-4">
+    <div class="toast-container position-relative">
+        <div id="toast-success" class="toast fade bg-success text-white align-items-center" role="alert" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-body"><i class="bi bi-check-circle-fill me-2"></i>Restaurant updated successfully!</div>
+        </div>
+        <div id="toast-error" class="toast fade bg-danger text-white align-items-center" role="alert" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-body"><i class="bi bi-x-circle-fill me-2"></i>Something went wrong. Please try again.</div>
+        </div>
+        <div id="toast-warning" class="toast fade bg-warning text-dark align-items-center" role="alert" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-body"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please fill in all required fields.</div>
+        </div>
+        <div id="toast-info" class="toast fade bg-info text-white align-items-center" role="alert" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-body"><i class="bi bi-info-circle-fill me-2"></i>Editing mode activated.</div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function showToast(id) {
+            const toastEl = document.getElementById(id);
+            if (!toastEl) return;
+            const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+            toast.show();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Show "Editing mode" toast on page load
+            showToast("toast-info");
+
+            // Form validation + warning toast
+            const form = document.querySelector("form.needs-validation");
+            if (!form) return;
+
+            form.addEventListener("submit", function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add("was-validated");
+                    showToast("toast-warning");
+                }
+            });
+        });
+            function showToast(id) {
+            const toastEl = document.getElementById(id);
+            if (!toastEl) return;
+            const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+            toast.show();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            showToast("toast-info");
+
+            const form = document.querySelector("form.needs-validation");
+            if (!form) return;
+
+            form.addEventListener("submit", function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showToast("toast-warning");
+                    form.classList.add("was-validated");
+                } else {
+                    // 🟢 Valid form - show success toast just before real submission
+                    e.preventDefault(); // Prevent actual submission for demo/testing
+                    form.classList.add("was-validated");
+                    showToast("toast-success");
+
+                    // Submit for real after short delay (optional)
+                    setTimeout(() => form.submit(), 600); // remove this delay for instant submit
+                }
+            });
+        });
+    </script>
+}

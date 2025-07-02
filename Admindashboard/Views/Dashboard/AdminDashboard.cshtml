@@ -1,0 +1,33 @@
+﻿<h1>Admin Dashbhoard</h1>
+<p>Welcome, @User.Identity.Name!</p>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-body text-center">
+                    <h4 class="card-title mb-3">👤 Admin Profile</h4>
+                    <p><strong>Email:</strong> @User.Identity.Name</p>
+                    <span class="badge bg-success">Role: Admin</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">📊 Quick Actions</h4>
+                    <div class="d-grid gap-3">
+                        <a asp-action="ViewRestaurants" asp-controller="Restaurant" class="btn btn-outline-primary btn-lg w-100">🍽 View Restaurants</a>
+                        <a asp-action="ViewLocations" asp-controller="Restaurant" class="btn btn-outline-secondary btn-lg w-100">📍 View Locations</a>
+                        <a asp-action="ViewReviews" asp-controller="Restaurant" class="btn btn-outline-info btn-lg w-100">📝 View Reviews</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
