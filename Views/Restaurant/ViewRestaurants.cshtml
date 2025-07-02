@@ -1,0 +1,49 @@
+﻿@model List<FoodieMVC.DTO.RestuarantDTO>
+
+@* @{
+    ViewData["Title"] = "View Restaurants";
+} *@
+
+<h2>Restaurants</h2>
+
+<a asp-action="AddRestaurant" class="btn btn-success mb-3">Add New Restaurant</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Likes</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.restaurantId</td>
+                    <td>@item.restaurantName</td>
+                    <td>@item.restaurantAddress</td>
+                    <td>@item.likes</td>
+                    <td>@item.rating</td>
+                    <td>
+                        <a asp-action="EditRestaurant" asp-route-id="@item.restaurantId" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="DeleteRestaurant" asp-route-id="@item.restaurantId" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="ViewRestaurantDetails" asp-route-id="@item.restaurantId" class="btn btn-info btn-sm">View</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No restaurants found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

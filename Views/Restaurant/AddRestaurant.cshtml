@@ -1,0 +1,68 @@
+﻿@model FoodieMVC.DTO.RestuarantDTO
+
+@{
+    ViewData["Title"] = "Add Restaurant";
+}
+
+<h2>Add Restaurant</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<form asp-action="AddRestaurant" method="post">
+    <div class="form-group">
+        <label asp-for="restaurantName" class="control-label"></label>
+        <input asp-for="restaurantName" class="form-control" />
+        <span asp-validation-for="restaurantName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="restaurantAddress" class="control-label"></label>
+        <input asp-for="restaurantAddress" class="form-control" />
+        <span asp-validation-for="restaurantAddress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="likes" class="control-label"></label>
+        <input asp-for="likes" class="form-control" />
+        <span asp-validation-for="likes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="rating" class="control-label"></label>
+        <input asp-for="rating" class="form-control" step="0.1" />
+        <span asp-validation-for="rating" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="openingTime" class="control-label"></label>
+        <input asp-for="openingTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="openingTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="closeTime" class="control-label"></label>
+        <input asp-for="closeTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="closeTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="restLocId" class="control-label"></label>
+        <input asp-for="restLocId" class="form-control" />
+        <span asp-validation-for="restLocId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <a asp-action="ViewRestaurants" class="btn btn-secondary mt-3">Back to List</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
