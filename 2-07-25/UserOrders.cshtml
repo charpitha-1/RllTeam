@@ -1,0 +1,56 @@
+﻿@model List<FoodieMVC.DTO.OrderDetailsDTO>
+
+@{
+    ViewData["Title"] = "User Orders";
+}
+
+<h2>User Orders</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+else if (Model != null && Model.Count > 0)
+{
+    foreach (var order in Model)
+    {
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Order ID:</strong> @order.orderId |
+                <strong>Date:</strong> @order.orderDate.ToString("dd MMM yyyy") |
+                <strong>Status:</strong> @order.orderStatus
+            </div>
+            <div class="card-body">
+                <p><strong>Final Amount:</strong> ₹@order.finalAmount</p>
+                <p><strong>Discount:</strong> ₹@order.discount | <strong>GST:</strong> ₹@order.gst</p>
+                <p><strong>Restaurant ID:</strong> @order.restId | <strong>Delivered By:</strong> @order.deliveredBy</p>
+                <p><strong>Delivery Schedule:</strong> @order.scheduleDeliveryAt?.ToString("dd MMM yyyy hh:mm tt")</p>
+
+                <h5 class="mt-3">Line Items:</h5>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Food Item ID</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in order.orderLineItems)
+                        {
+                            <tr>
+                                <td>@item.foodItemId</td>
+                                <td>@item.qty</td>
+                                <td>@item.unitPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p class="text-muted">No orders to display.</p>
+}
