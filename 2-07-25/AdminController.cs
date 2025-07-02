@@ -29,18 +29,18 @@ namespace FoodieMVC.Controllers
             // endpoint should match your API route
             return View(res.result); // Pass the list to the view
         }
-        [HttpGet("{orderId}")]
-        public async Task<IActionResult> ViewOrder(int orderId)
-        {
-            var result = await clientHelper.GetData<OrderDetailsDTO>($"api/OrderDetails/{orderId}");
-            if (result == null)
-            {
-                ViewBag.Error = "Order not found.";
-                return View(); // Empty model to show error message
-            }
+        //[HttpGet("{orderId}")]
+        //public async Task<IActionResult> ViewOrder(int orderId)
+        //{
+        //    var result = await clientHelper.GetData<OrderDetailsDTO>($"api/OrderDetails/{orderId}");
+        //    if (result == null)
+        //    {
+        //        ViewBag.Error = "Order not found.";
+        //        return View(); // Empty model to show error message
+        //    }
 
-            return View(result); // ✔ Passing a single order
-        }
+        //    return View(result); // ✔ Passing a single order
+        //}
 
 
 
@@ -86,14 +86,50 @@ namespace FoodieMVC.Controllers
         }
 
 
-        [HttpGet]
+
+
+        //[HttpGet("Admin/UserReviews/{userId}")]
+        //public async Task<IActionResult> UserReviews(int userId)
+        //{
+        //    try
+        //    {
+        //        var reviews = await clientHelper.GetData<List<ReviewDTO>>($"User/{userId}");
+
+        //        if (reviews == null || reviews.Count == 0)
+        //        {
+        //            ViewBag.Message = $"No reviews found for User ID {userId}.";
+        //            return View(new List<ReviewDTO>()); // Return empty list to avoid null issues in view
+        //        }
+
+        //        return View(reviews);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Message = "Error fetching data: " + ex.Message;
+        //        return View(new List<ReviewDTO>());
+        //    }
+        //}
+        [HttpGet("Admin/UserReviews/{userId}")]
         public async Task<IActionResult> UserReviews(int userId)
         {
-         // Adjust based on your API route
-            var result =  await clientHelper.GetData<ReviewDTO>($"Review/{userId}");
+            // Use lowercase 'review' in URL if API controller is named ReviewController
+            string apiEndpoint = $"api/review/User/{userId}";
 
-            return View(result);
+            var reviews = await clientHelper.GetData<List<ReviewDTO>>(apiEndpoint);
+
+            if (reviews == null || reviews.Count == 0)
+            {
+                ViewBag.Message = $"No reviews found for User ID {userId}.";
+                return View(new List<ReviewDTO>());
+            }
+
+            return View(reviews);
         }
+
+
+
+
+
 
     }
 
