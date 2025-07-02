@@ -1,0 +1,50 @@
+﻿@model FoodieMVC.DTO.OrderDetailsDTO
+
+@{
+    ViewBag.Title = "Schedule Delivery";
+}
+
+<h2>🕒 Schedule Your Delivery</h2>
+
+@using (Html.BeginForm("Schedule", "Order", FormMethod.Post, new { @id = "scheduleForm" }))
+{
+    <div class="form-group">
+        <label>Select Delivery Date & Time:</label>
+        @Html.TextBoxFor(m => m.scheduleDeliveryAt, new {
+        @class = "form-control",
+        type = "datetime-local",
+        required = "required",
+        id = "scheduleTimeInput"
+        })
+</div>
+
+<button type="submit" class="btn btn-success">Confirm Schedule</button>
+}
+
+<!-- Success Popup -->
+<div id="confirmationPopup" class="alert alert-success text-center mt-4" style="display:none;">
+    <strong>✅ Order scheduled!</strong><br />
+    Delivery is set for <span id="scheduledTimeText"></span>
+</div>
+
+@section scripts {
+    <script>
+        document.getElementById("scheduleForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent actual submit
+
+            const scheduledTime = document.getElementById("scheduleTimeInput").value;
+
+            if (scheduledTime) {
+                document.getElementById("scheduledTimeText").innerText =
+                    new Date(scheduledTime).toLocaleString();
+
+                document.getElementById("confirmationPopup").style.display = "block";
+
+                // OPTIONAL: Post the form via AJAX to backend
+                // You could still use fetch() or $.ajax() to send data
+            } else {
+                alert("Please choose a schedule time.");
+            }
+        });
+    </script>
+}
