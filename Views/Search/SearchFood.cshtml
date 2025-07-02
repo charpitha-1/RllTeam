@@ -1,0 +1,17 @@
+﻿@using FoodieMVC.DTO
+@model List<LocationDTO>
+<h2>Select Location</h2>
+
+<form method="post" action="/Profile/SubmitLocation">
+    <label for="LocationId">Location:</label>
+    <select id="LocationId" name="LocationId" class="form-control" required>
+        <option value="">-- Select Location --</option>
+        @foreach (var loc in Model)
+        {
+            <option value="@loc.locationId">
+                <span>@loc.city </span>-
+                <span>@loc.area</span>-<span>@loc.postalCode</span>
+            </option>
+        }
+    </select>
+    </form>

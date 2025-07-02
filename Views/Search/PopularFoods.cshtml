@@ -1,0 +1,22 @@
+﻿﻿@using FoodieMVC.DTO
+@model List<PopularFood>
+
+<h2>Most Popular Ordered Foods</h2>
+
+<table border="1" width="75%">
+    <thead>
+        <tr>
+            <th>Food Name</th>
+            <th>Total Quantity Ordered</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var food in Model)
+        {
+            <tr>
+                <td>@food.FoodName</td>
+                <td>@food.QuantityOrdered</td>
+            </tr>
+        }
+    </tbody>
+</table>

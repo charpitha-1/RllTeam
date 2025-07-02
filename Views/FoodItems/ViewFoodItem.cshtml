@@ -1,0 +1,37 @@
+﻿@using FoodieMVC.DTO
+@model List<FoodItemDTO>
+<table class="table table-bordered table-striped">
+<thead>
+    <tr>
+        <th>FoodItemId</th>
+            <th>Name</th>
+            <th>Description </th>
+            <th>Price </th>
+            <th>RestaurantId</th>
+            
+    </tr>
+</thead>
+<tbody>
+    @foreach (var food in Model)
+    {
+      <tr>
+          <td>
+                    @food.foodItemId
+          </td>
+          <td>
+                    @food.name
+          </td>
+          <td>
+              @food.price
+          </td>
+          <td>
+                    @food.description
+          </td>
+          <td>
+                    @food.restaurantId
+          </td> 
+      </tr>
+    }
+</tbody>
+</table>
+
