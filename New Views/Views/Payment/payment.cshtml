@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Checkout - FoodExpress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .payment-option {
+            min-height: 100px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+            .payment-option:hover {
+                background: #f8f9fa;
+                transform: scale(1.02);
+            }
+
+        .disabled-option {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <h2 class="text-center mb-5">💳 Complete Your Payment</h2>
+
+        <div class="row g-3 mb-4">
+            <!-- Payment Options -->
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option disabled-option">
+                    <h5>🚫 Cash on Delivery</h5>
+                    <small class="text-muted">Temporarily unavailable</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('upi')">
+                    <h5>🔗 UPI</h5>
+                    <small>Google Pay, PhonePe, etc.</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('debit')">
+                    <h5>🏦 Debit Card</h5>
+                    <small>Visa, Mastercard, RuPay</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('credit')">
+                    <h5>💳 Credit Card</h5>
+                    <small>Fast, secure checkout</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('paylater')">
+                    <h5>🕓 Pay Later</h5>
+                    <small>EMI or BNPL services</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('paytm')">
+                    <h5>📱 Paytm</h5>
+                    <small>Wallet or UPI</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-4 rounded payment-option" onclick="openModal('paypal')">
+                    <h5>🌐 PayPal</h5>
+                    <small>International payments</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selected Payment Summary -->
+        <div class="mb-4">
+            <h5>Selected Method: <span id="selectedMethod" class="text-primary">None</span></h5>
+            <div id="paymentDetails" class="mt-2"></div>
+        </div>
+
+        <div class="text-center">
+            <button class="btn btn-lg btn-success px-5" onclick="payNow()">💸 Pay</button>
+        </div>
+    </div>
+
+    <!-- 🎉 Congratulations Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content text-center p-5">
+                <h1 class="display-4 text-success">🎉 Congratulations!</h1>
+                <p class="lead mt-3">Your payment was successful. Redirecting you home...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔐 Dynamic Payment Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form onsubmit="saveDetails(event)">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Enter Payment Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!-- Fields inserted dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Save Details</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS & Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const details = {};
+        const methodLabels = {
+          upi: 'UPI',
+          debit: 'Debit Card',
+          credit: 'Credit Card',
+          paylater: 'Pay Later',
+          paytm: 'Paytm',
+          paypal: 'PayPal'
+        };
+
+        const fieldsByMethod = {
+          upi: ['UPI ID'],
+          debit: ['Card Number', 'Expiry', 'CVV'],
+          credit: ['Card Number', 'Expiry', 'CVV', 'Name on Card'],
+          paylater: ['Phone Number', 'Pay Later Provider'],
+          paytm: ['Paytm Mobile Number'],
+          paypal: ['PayPal Email']
+        };
+
+        function openModal(method) {
+          document.getElementById("selectedMethod").innerText = methodLabels[method];
+          document.getElementById("modalBody").innerHTML = fieldsByMethod[method]
+            .map(label => `<label class="form-label mt-2">${label}</label><input class="form-control" name="${label}" required />`)
+            .join("");
+
+          document.getElementById("detailModal").setAttribute("data-method", method);
+          new bootstrap.Modal(document.getElementById("detailModal")).show();
+        }
+
+        function saveDetails(e) {
+          e.preventDefault();
+          const modal = document.getElementById("detailModal");
+          const method = modal.getAttribute("data-method");
+          const inputs = modal.querySelectorAll("input");
+          details[method] = {};
+
+          inputs.forEach(input => {
+            details[method][input.name] = input.value;
+          });
+
+          document.getElementById("paymentDetails").innerHTML = `
+            <div class="alert alert-light border">
+              <strong>${methodLabels[method]}</strong> details saved ✅
+            </div>`;
+
+          bootstrap.Modal.getInstance(modal).hide();
+        }
+
+        function payNow() {
+          const method = document.getElementById("selectedMethod").innerText;
+          if (method === "None" || !details[method.toLowerCase()]) {
+            alert("Please select a payment method and enter details before paying.");
+            return;
+          }
+
+          // 1. Save payment locally + log to console
+          const paymentInfo = {
+            method,
+            detail: details[method.toLowerCase()],
+            time: new Date().toISOString()
+          };
+          console.log("💳 Payment Info:", paymentInfo);
+          localStorage.setItem("lastPayment", JSON.stringify(paymentInfo));
+
+          // 2. Show congrats modal
+          new bootstrap.Modal(document.getElementById("successModal")).show();
+
+          // 3. Redirect after 5s
+          setTimeout(() => {
+            window.location.href = "https://localhost:7225/"; // change if needed
+          }, 2500);
+        }
+    </script>
+</body>
+</html>

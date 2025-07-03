@@ -1,0 +1,176 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Management | Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+
+        .centerr {
+            margin-left: auto;
+            margin-right: 10%;
+        }
+
+        .card-header {
+            background: #343a40;
+            color: white;
+        }
+
+        .table-wrapper {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .filter-form select {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid p-4">
+        <h2 class="mb-4 text-center text-dark fw-bold">📦 Order Management</h2>
+
+        <!-- 🔍 Filters -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form class="d-flex align-items-center flex-wrap filter-form">
+                    <select class="form-select form-select-sm w-auto mb-2" id="filterUser">
+                        <option selected disabled>Filter by User</option>
+                        <option value="1">Ravi Kumar</option>
+                        <option value="2">Divya Patel</option>
+                    </select>
+                    <select class="form-select form-select-sm w-auto mb-2" id="filterRestaurant">
+                        <option selected disabled>Filter by Restaurant</option>
+                        <option value="1">Spicy Tandoori</option>
+                        <option value="2">Pizza Castle</option>
+                    </select>
+                    <select class="form-select form-select-sm w-auto mb-2" id="filterStatus">
+                        <option selected disabled>Status</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    <button type="button" class="btn btn-sm btn-secondary mb-2" onclick="applyOrderFilters()">Apply</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary mb-2" onclick="clearOrderFilters()">Reset</button>
+                    <div class="d-flex align-items-center centerr">
+                        <h6 class="me-auto mb-0">All Orders</h6>
+                        <input type="text" class="form-control form-control-sm w-auto me-2"
+                               id="searchOrderId" placeholder="Search by Order ID"
+                               oninput="searchOrderById()">
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- 📑 Orders Table -->
+        <div class="card shadow-sm">
+            <div class="card-header">All Orders</div>
+            <div class="card-body table-wrapper">
+                <table class="table table-bordered table-hover table-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>User</th>
+                            <th>Restaurant</th>
+                            <th>Total (₹)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📍 View Delivery Modal -->
+    <div class="modal fade" id="deliveryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Delivery Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Delivery Person:</strong> Kumar (ID: DP123)</p>
+                    <p><strong>Location:</strong> Near Thiruvanmiyur Signal</p>
+                    <p><strong>Estimated Time of Arrival:</strong> 15 mins</p>
+                    <img src="https://via.placeholder.com/400x200?text=Mock+Map" class="img-fluid border rounded" alt="Mock Map">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🗓️ Schedule Modal -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="scheduleForm">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Schedule Delivery</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label>Select Date & Time</label>
+                        <input type="datetime-local" class="form-control" id="scheduleTime" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Cancel modal-->
+    <div class="modal fade" id="cancelModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Cancel Order</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to cancel <strong>Order #<span id="cancelOrderIdDisplay"></span></strong>? This cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" id="confirmCancelBtn">Yes, Cancel</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ✅ Toasts -->
+    <div id="toastWrapper" class="toast align-items-center position-fixed bottom-0 end-0 m-4 text-white bg-success" style="display:none; z-index:999;">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">Placeholder</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="document.getElementById('toastWrapper').style.display='none'"></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Admin.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          renderOrders();
+        });
+    </script>
+
+
+</body>
+</html>

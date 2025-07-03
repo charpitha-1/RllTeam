@@ -1,0 +1,229 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #f9f9f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    #searchResults li {
+        /* Add this line: */
+        color: #212529; /* Bootstrap dark text color */
+    }
+
+    
+    .search-hero {
+        background: linear-gradient(to right, #fc4a1a, #f7b733);
+        padding: 60px 20px;
+        text-align: center;
+        color: #fff;
+    }
+
+    .restaurant-card, .order-card {
+        border: none;
+        transition: 0.3s;
+    }
+
+        .restaurant-card:hover, .order-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+    #searchContainer {
+        max-width: 600px;
+        margin: 30px auto 0;
+    }
+
+    #searchResults {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: #fff;
+        border-radius: 0.5rem;
+        overflow-y: auto;
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
+        max-height: 300px;
+    }
+
+        #searchResults li {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            #searchResults li:hover {
+                background-color: #f1f1f1;
+            }
+</style>
+
+<header class="search-hero">
+    <h1 class="display-5 fw-bold mb-3">Find your next favorite meal</h1>
+    <p class="lead">Search for restaurants or dishes and get food delivered fast 🍕</p>
+
+    <div id="searchContainer" class="position-relative">
+        <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="Try 'Paneer Tikka' or 'Anand Bhavan'">
+        <ul id="searchResults" class="list-group mt-2"></ul>
+    </div>
+</header>
+
+<div class="container mt-5">
+    <!-- 🍽️ Recommendations -->
+    <h3 class="mb-3">🔥 Recommended Restaurants</h3>
+    <div class="row" id="recommendationsContainer"></div>
+
+    <!-- 📦 Order History -->
+    <h3 class="mt-5 mb-3">📜 Your Recent Orders</h3>
+    <div class="row" id="orderHistoryContainer"></div>
+</div>
+
+<script>
+    // Static Data for Now (replace later with dynamic data)
+    const foodLookup = {
+        1: { name: "Paneer Butter Masala", restaurant: "Spice Villa" },
+        2: { name: "Margherita Pizza", restaurant: "Pizza Castle" },
+        3: { name: "Chicken Biryani", restaurant: "Spicy Bowl" },
+    };
+
+    const restaurantPages = {
+        "Spice Villa": "Restaurent",
+        "Pizza Castle": "/Restaurent/Details/2",
+        "Spicy Bowl": "/Restaurent/Details/3",
+    };
+
+    const recommendations = [
+        { id: 1, name: "Spice Villa", cuisine: "South Indian", rating: 4.5 },
+        { id: 2, name: "Pizza Castle", cuisine: "Italian", rating: 4.2 },
+        { id: 3, name: "Spicy Bowl", cuisine: "North Indian", rating: 4.8 }
+    ];
+
+    const orderHistory = [
+        { id: 101, item: "Butter Naan & Dal Makhani", restaurant: "Spice Villa", date: "2024-06-12", total: 320 },
+        { id: 102, item: "Veg Supreme Pizza", restaurant: "Pizza Castle", date: "2024-06-10", total: 450 },
+        { id: 103, item: "Mutton Biryani", restaurant: "Spicy Bowl", date: "2024-06-07", total: 600 }
+    ];
+
+    // Render Recommendations
+    const recContainer = document.getElementById("recommendationsContainer");
+    recommendations.forEach(r => {
+        recContainer.innerHTML += `
+          <div class="col-md-4 mb-4">
+            <div class="card restaurant-card">
+              <div class="card-body">
+                <h5 class="card-title">${r.name}</h5>
+                <p class="card-text text-muted">${r.cuisine}</p>
+                <span class="badge bg-success">⭐ ${r.rating}</span>
+                <a href="${restaurantPages[r.name]}" class="btn btn-sm btn-outline-primary float-end">View</a>
+              </div>
+            </div>
+          </div>`;
+    });
+
+    // Render Order History
+    const orderContainer = document.getElementById("orderHistoryContainer");
+    orderHistory.forEach(order => {
+        orderContainer.innerHTML += `
+          <div class="col-md-6 mb-4">
+            <div class="card order-card">
+              <div class="card-body">
+                <h6 class="card-title fw-bold">${order.item}</h6>
+                <p class="mb-1"><small>From <strong>${order.restaurant}</strong> on ${order.date}</small></p>
+                <p class="text-success fw-bold">₹${order.total}</p>
+              </div>
+            </div>
+          </div>`;
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.toLowerCase().trim();
+        searchResults.innerHTML = "";
+        if (!query) return;
+
+        const seen = new Set();
+
+        Object.entries(foodLookup).forEach(([id, item]) => {
+            if (item.name.toLowerCase().includes(query) && !seen.has(item.name)) {
+                seen.add(item.name);
+                const li = document.createElement("li");
+                li.innerHTML = `🍛 <strong>${item.name}</strong> <span class="text-muted">from ${item.restaurant}</span>`;
+                li.onclick = () => window.location.href = restaurantPages[item.restaurant];
+                searchResults.appendChild(li);
+            }
+        });
+
+        Object.keys(restaurantPages).forEach(restaurant => {
+            if (restaurant.toLowerCase().includes(query) && !seen.has(restaurant)) {
+                seen.add(restaurant);
+                const li = document.createElement("li");
+                li.innerHTML = `🏪 <strong>${restaurant}</strong>`;
+                li.onclick = () => window.location.href = restaurantPages[restaurant];
+                searchResults.appendChild(li);
+            }
+        });
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest("#searchInput") && !e.target.closest("#searchResults")) {
+            searchResults.innerHTML = "";
+        }
+    });
+</script>
+
+<script src="~/js/cartManager.js"></script>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      searchResults.innerHTML = "";
+
+      if (!query) return;
+
+      const seen = new Set();
+
+      // Match food
+      Object.entries(foodLookup).forEach(([id, item]) => {
+        if (item.name.toLowerCase().includes(query) && !seen.has(item.name)) {
+          seen.add(item.name);
+          const li = document.createElement("li");
+          li.className = "list-group-item list-group-item-action";
+          li.innerHTML = `🍛 <strong>${item.name}</strong> <span class="text-muted">from ${item.restaurant}</span>`;
+          li.onclick = () => location.href = "https://localhost:7225/Restaurent";
+          searchResults.appendChild(li);
+        }
+      });
+
+      // Match restaurants
+      Object.keys(restaurantPages).forEach(rest => {
+        if (rest.toLowerCase().includes(query) && !seen.has(rest)) {
+          seen.add(rest);
+          const li = document.createElement("li");
+          li.className = "list-group-item list-group-item-action";
+          li.innerHTML = `🏪 <strong>${rest}</strong>`;
+          li.onclick = () => location.href = restaurantPages[rest];
+          searchResults.appendChild(li);
+        }
+      });
+    });
+
+    // Hide on click outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#searchInput") && !e.target.closest("#searchResults")) {
+        searchResults.innerHTML = "";
+      }
+    });
+</script>
+
+
+

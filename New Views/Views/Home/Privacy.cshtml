@@ -1,0 +1,87 @@
+﻿@* @{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+*@
+
+@model FoodieMVC.DTO.OrderDetailsDTO
+
+@{
+    ViewBag.Title = "Schedule Delivery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-info text-white">
+            <h2 class="mb-0">🕒 Schedule Your Delivery</h2>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Schedule", "Order", FormMethod.Post, new { @id = "scheduleForm" }))
+            {
+                <div class="form-group mb-4">
+                    <label class="font-weight-bold">Select Delivery Date & Time:</label>
+                     @Html.TextBoxFor(m => m.scheduleDeliveryAt, new {
+                        @class = "form-control",
+                        type = "datetime-local",
+                        required = "required",
+                        id = "scheduleTimeInput"
+                    }) 
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success btn-lg">✅ Confirm Schedule</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="showHistory()">📋 View Schedule History</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Success Popup -->
+<div id="confirmationPopup" class="alert alert-success mt-4 text-center" style="display:none;">
+    <h4>🎉 Delivery Scheduled Successfully</h4>
+    <p>Your food is scheduled for delivery on: <strong id="scheduledTimeText"></strong></p>
+</div>
+
+<!-- Popup: History -->
+<div id="historyPopup" class="alert alert-primary text-center mt-4 container" style="display:none;">
+    <h4>📅 Scheduled Delivery History</h4>
+    <p>Last delivery scheduled on: <strong id="lastScheduleTimeText"></strong></p>
+</div>
+
+@section Scripts {
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("scheduleForm");
+            const input = document.getElementById("scheduleTimeInput");
+            const confirmationPopup = document.getElementById("confirmationPopup");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault(); // Stop form submission
+
+                const scheduledTime = input.value || "🕒 Not selected";
+
+                // Always show popup, even if input is missing
+                document.getElementById("scheduledTimeText").innerText =
+                    new Date(scheduledTime).toLocaleString();
+                confirmationPopup.style.display = "block";
+
+                // Optional: save to localStorage
+                localStorage.setItem("lastScheduledTime", new Date(scheduledTime).toLocaleString());
+            });
+        });
+
+        function showHistory() {
+            const lastScheduled = localStorage.getItem("lastScheduledTime");
+            if (lastScheduled) {
+                document.getElementById("lastScheduleTimeText").innerText = lastScheduled;
+                document.getElementById("historyPopup").style.display = "block";
+            } else {
+                alert("📭 No scheduled history found.");
+            }
+        }
+    </script>
+}
