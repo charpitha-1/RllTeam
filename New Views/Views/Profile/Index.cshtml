@@ -1,4 +1,4 @@
-﻿@model FoodieCoreMVC.Models.UserProfileViewModel
+@model FoodieCoreMVC.Models.UserProfileViewModel
 
 <div class="container mt-4 profile-box">
     <div class="profile-header text-center">
@@ -134,23 +134,42 @@
 </div>
 
 <!-- 🌟 Rate & Review Modal -->
+
+
+
 <div class="modal fade" id="rateReviewModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">Rate & Review</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <label class="form-label">Select a Dish</label>
-                <select class="form-select mb-3">
-                    <option>Butter Paneer</option>
-                    <option>Chicken 65</option>
-                    <option>Veg Pizza</option>
-                </select>
-                <textarea class="form-control mb-3" placeholder="Write your review..." rows="3"></textarea>
-                <button class="btn btn-success">Submit</button>
-            </div>
+            <form id="rateReviewForm">
+                <!-- Replace with your actual POST action -->
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Rate & Review Your Dish</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Select Dish</label>
+                    <select name="DishName" class="form-select mb-3" required>
+                        <option value="">-- Choose --</option>
+                        <option>Butter Paneer</option>
+                        <option>Chicken 65</option>
+                        <option>Veg Pizza</option>
+                    </select>
+
+                    <label class="form-label">Rating</label>
+                    <input type="number" name="Rating" class="form-control mb-3" min="1" max="5" placeholder="Rate from 1 to 5" required />
+
+                    <label class="form-label">Comments</label>
+                    <textarea name="Comments" class="form-control mb-3" placeholder="Write your review..." rows="4" required></textarea>
+
+                    <input type="hidden" name="OrderID" value="1234" />
+                    <input type="hidden" name="FoodItemID" value="5678" />
+
+                    <button type="submit" class="btn btn-success w-100">Submit Review</button>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-dark w-100" asp-area="" asp-controller="Home" asp-action="Privacy">📜 View All My Reviews</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -217,5 +236,32 @@
       document.querySelector("dd:nth-of-type(1)").innerText = email;
 
       bootstrap.Modal.getInstance(document.getElementById("editProfileModal")).hide();
+    });
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("rateReviewForm");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const dish = form.querySelector("[name='DishName']").value;
+            const rating = form.querySelector("[name='Rating']").value;
+            const comments = form.querySelector("[name='Comments']").value;
+            const review = {
+                reviewId: "RV-" + Date.now(),
+                rating: rating,
+                createdAt: new Date().toLocaleDateString(),
+                comments: comments,
+                orderId: "1234",
+                foodItemId: "5678"
+            };
+
+            const reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+            reviews.push(review);
+            localStorage.setItem("reviews", JSON.stringify(reviews));
+
+            alert("✅ Review submitted!");
+            form.reset();
+        });
     });
 </script>
