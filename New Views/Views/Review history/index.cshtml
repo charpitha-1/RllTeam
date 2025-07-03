@@ -1,0 +1,88 @@
+@* model List<FoodieCoreMVC.DTO.ReviewDTO>
+
+@{
+    ViewData["Title"] = "User Reviews";
+} *@
+
+    <h2 class="mb-4">User Reviews</h2>
+
+@* @if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+        <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+@if (Model != null && Model.Count > 0)
+{ *@
+<h2 class="mb-4 text-primary">📜 Your Past Reviews</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Review ID</th>
+                <th>Rating</th>
+                <th>Date</th>
+                <th>Comments</th>
+                <th>Order ID</th>
+                <th>Food Item ID</th>
+            </tr>
+        </thead>
+        <tbody>
+                @* @foreach (var review in Model)
+                { *@
+                    <tr>
+                        <td>@* @review.reviewId *@ A</td>
+                        <td>@* @review.rating *@A</td>
+                        <td>@* @review.createdAt.ToString("dd MMM yyyy") *@A</td>
+                        <td>@* @review.comments *@A</td>
+                        <td>@* @review.orderId *@A</td>
+                        <td>@* @review.foodItemId *@A</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge bg-secondary">A</span></td>
+                        <td><span class="badge bg-success">A</span></td>
+                        <td><span class="text-muted">A</span></td>
+                        <td>A</td>
+                        <td><code>A</code></td>
+                        <td><code>A</code></td>
+                    </tr>
+                @* } *@
+        </tbody>
+    </table>
+</div>
+@* }
+else if (string.IsNullOrEmpty(ViewBag.Message))
+{
+        <div class="text-muted">No reviews to display.</div>
+}
+ *@
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+        const tbody = document.querySelector("table tbody");
+
+        // Clear previous rows if needed
+        tbody.innerHTML = "";
+
+        if (reviews.length === 0) {
+            const emptyRow = document.createElement("tr");
+            emptyRow.innerHTML = `<td colspan="6" class="text-center text-muted">No reviews found.</td>`;
+            tbody.appendChild(emptyRow);
+            return;
+        }
+
+        reviews.forEach(review => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${review.reviewId}</td>
+                <td>${review.rating}</td>
+                <td>${review.createdAt}</td>
+                <td>${review.comments}</td>
+                <td>${review.orderId}</td>
+                <td>${review.foodItemId}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    });
+</script>
