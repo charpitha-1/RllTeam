@@ -1,0 +1,320 @@
+@model FoodieCoreMVC.Models.UserProfileViewModel
+﻿@* @model List<FoodieMVC.DTO.OrderDetailsDTO> *@
+
+<div class="container mt-4 profile-box">
+    <div class="profile-header text-center">
+        <h2>@Model.Name</h2>
+        <p>Foodie | Chennai, Tamil Nadu</p>
+    </div>
+
+    <div class="p-4">
+        <dl class="row profile-info">
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">+91 98765 43210</dd>
+
+            <dt class="col-sm-3">Address</dt>
+            <dd class="col-sm-9">12, Marina Street, Chennai</dd>
+
+            <dt class="col-sm-3">Member Since</dt>
+            <dd class="col-sm-9">August 2023</dd>
+        </dl>
+
+        <hr />
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start flex-wrap mt-3">
+            <button class="btn btn-outline-primary me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#orderHistoryModal">Order History</button>
+            <button class="btn btn-outline-warning me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#likedItemsModal">Liked Items</button>
+            <button class="btn btn-outline-success me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#scheduledModal">Scheduled Orders</button>
+            <button class="btn btn-outline-dark me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#rateReviewModal">Rate & Review</button>
+            <button class="btn btn-outline-danger me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#canceledModal">Cancel Order</button>
+            <button class="btn btn-outline-secondary me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#modifyOrderModal">Modify Order</button>
+            <button class="btn btn-outline-info me-md-2 mb-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+        </div>
+
+    </div>
+
+
+</div>
+
+<!-- ✏️ Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="profileForm">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="profileName" class="form-control mb-2" value="John Doe" required>
+                    <label class="form-label">Email</label>
+                    <input type="email" id="profileEmail" class="form-control" value="john@example.com" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- 🧾 User Order History Modal -->
+@* <div class="modal fade" id="userOrderModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Your Orders</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if (!string.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class="alert alert-info">@ViewBag.Message</div>
+                }
+                else if (Model != null && Model.Count > 0)
+                {
+                    foreach (var order in Model)
+                    {
+                        <div class="card mb-4 shadow-sm border-0">
+                            <div class="card-header bg-light fw-semibold">
+                                <strong>Order ID:</strong> @order.orderId |
+                                <strong>Date:</strong> @order.orderDate.ToString("dd MMM yyyy") |
+                                <strong>Status:</strong> @order.orderStatus
+                            </div>
+                            <div class="card-body bg-white">
+                                <p><strong>Final Amount:</strong> ₹@order.finalAmount</p>
+                                <p>
+                                    <strong>Discount:</strong> ₹@order.discount |
+                                    <strong>GST:</strong> ₹@order.gst
+                                </p>
+                                <p>
+                                    <strong>Restaurant ID:</strong> @order.restId |
+                                    <strong>Delivered By:</strong> @order.deliveredBy
+                                </p>
+                                <p><strong>Delivery Schedule:</strong> @order.scheduleDeliveryAt?.ToString("dd MMM yyyy hh:mm tt")</p>
+
+                                <h6 class="mt-3 text-success">🍽️ Line Items:</h6>
+                                <table class="table table-sm table-bordered mt-2">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <th>Food Item ID</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in order.orderLineItems)
+                                        {
+                                            <tr>
+                                                <td>@item.foodItemId</td>
+                                                <td>@item.qty</td>
+                                                <td>@item.unitPrice</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No orders to display.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div> *@
+
+
+<!-- ❤️ Liked Items Modal -->
+<div class="modal fade" id="likedItemsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Liked Items</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">🔥 Chicken Tikka – BBQ Nation</li>
+                    <li class="list-group-item">🍕 Veg Pizza – Domino’s</li>
+                    <li class="list-group-item">🥤 Mango Lassi – Anand Bhavan</li>
+                    <li class="list-group-item">🍜 Chow Mein – Noodle House</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ⏰ Scheduled Orders Modal -->
+<div class="modal fade" id="scheduledModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">Scheduled Deliveries</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">Paneer Roll – July 6, 12:00 PM</li>
+                    <li class="list-group-item">Veg Thali – July 7, 2:00 PM</li>
+                    <li class="list-group-item">Aloo Paratha – July 8, 9:00 AM</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ❌ Canceled Orders Modal -->
+<div class="modal fade" id="canceledModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title">Canceled Orders</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">Order #1456 – Pasta Bowl – June 12</li>
+                    <li class="list-group-item">Order #1432 – Idli Set – June 8</li>
+                    <li class="list-group-item">Order #1419 – Chicken Wrap – June 4</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🌟 Rate & Review Modal -->
+<div class="modal fade" id="rateReviewModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="rateReviewForm">
+                <!-- Replace with your actual POST action -->
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Rate & Review Your Dish</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Select Dish</label>
+                    <select name="DishName" class="form-select mb-3" required>
+                        <option value="">-- Choose --</option>
+                        <option>Butter Paneer</option>
+                        <option>Chicken 65</option>
+                        <option>Veg Pizza</option>
+                    </select>
+
+                    <label class="form-label">Rating</label>
+                    <input type="number" name="Rating" class="form-control mb-3" min="1" max="5" placeholder="Rate from 1 to 5" required />
+
+                    <label class="form-label">Comments</label>
+                    <textarea name="Comments" class="form-control mb-3" placeholder="Write your review..." rows="4" required></textarea>
+
+                    <input type="hidden" name="OrderID" value="1234" />
+                    <input type="hidden" name="FoodItemID" value="5678" />
+
+                    <button type="submit" class="btn btn-success w-100">Submit Review</button>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-dark w-100" asp-area="" asp-controller="Home" asp-action="Privacy">📜 View All My Reviews</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 🔧 Modify Order Modal -->
+<div class="modal fade" id="modifyOrderModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Modify Past Orders</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="orderModifyList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Edit Profile Handler
+    document.getElementById("profileForm")?.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("profileName").value;
+      const email = document.getElementById("profileEmail").value;
+      document.querySelector(".profile-header h2").innerText = name;
+      document.querySelector(".profile-info dd:nth-of-type(1)").innerText = email;
+      bootstrap.Modal.getInstance(document.getElementById("editProfileModal")).hide();
+    });
+
+    // Order History (long list for scroll)
+    document.getElementById("orderHistoryModal")?.addEventListener("show.bs.modal", () => {
+      const list = document.getElementById("orderHistoryList");
+      list.innerHTML = "";
+      for (let i = 1; i <= 30; i++) {
+        list.innerHTML += `<li class="list-group-item">Order #${1200 + i} – Dish ${i} – ₹${100 + i * 5}</li>`;
+      }
+    });
+
+    // Modify Order Scrollable List
+    document.getElementById("modifyOrderModal")?.addEventListener("show.bs.modal", () => {
+      const container = document.getElementById("orderModifyList");
+      container.innerHTML = "";
+      for (let i = 1; i <= 20; i++) {
+        container.innerHTML += `
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong>Order #${1500 + i}</strong>
+              <span>₹${200 + i * 8}</span>
+            </div>
+            <input class="form-control my-2" value="Dish ${i}" />
+            <input class="form-control mb-2" value="Restaurant ${i % 5 + 1}" />
+            <button class="btn btn-sm btn-success">Save</button>
+          </li>`;
+      }
+    });
+</script>
+<script>
+    document.getElementById("profileForm")?.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("profileName").value;
+      const email = document.getElementById("profileEmail").value;
+
+      document.querySelector("h2").innerText = name;
+      document.querySelector("dd:nth-of-type(1)").innerText = email;
+
+      bootstrap.Modal.getInstance(document.getElementById("editProfileModal")).hide();
+    });
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("rateReviewForm");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const dish = form.querySelector("[name='DishName']").value;
+            const rating = form.querySelector("[name='Rating']").value;
+            const comments = form.querySelector("[name='Comments']").value;
+            const review = {
+                reviewId: "RV-" + Date.now(),
+                rating: rating,
+                createdAt: new Date().toLocaleDateString(),
+                comments: comments,
+                orderId: "1234",
+                foodItemId: "5678"
+            };
+
+            const reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+            reviews.push(review);
+            localStorage.setItem("reviews", JSON.stringify(reviews));
+
+            alert("✅ Review submitted!");
+            form.reset();
+        });
+    });
+</script>
